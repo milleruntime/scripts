@@ -1,0 +1,60 @@
+#!/bin/bash
+. ~/.bashrc
+SW=/local
+usage() {
+  echo "usage: cluster [<start|stop> <hadoop|zookeeper|accumulo>]"
+  echo "       cluster start|stop = starts/stops entire cluster"
+  echo "       cluster = print status of the cluster"
+}
+stats() {
+  echo "Cluster processes currently running:"
+  jps -lm | grep apache | sort
+}
+
+#zookeeper and accumulo
+BINDIR='bin'
+
+if [[ -z "$1" ]]
+then
+  stats
+  exit
+fi
+if [[ "$1" != "start" && "$1" != "stop" ]] 
+then
+  usage
+  exit
+fi
+
+
+if [[ -n "$2" ]]
+then
+  if [[ "$2" == "hadoop" ]]
+  then
+     BINDIR='sbin'
+  fi
+  if [[ "$2" == "zookeeper" ]]
+  then
+     CMD="zkServer.sh $1"
+  else
+     CMD="$1-all.sh"
+  fi
+
+  echo "cluster is $1-ing $2"
+  $SW/cluster/$2/$BINDIR/$CMD
+  exit
+fi
+
+if [[ -n "$1" ]]
+then
+  if [[ "$1" == "start" ]]
+  then
+    echo "Starting entire cluster"
+    ~/scripts/cluster-start.sh
+  fi
+  if [[ "$1" == "stop" ]]
+  then
+    echo "Stopping entire cluster"
+    ~/scripts/cluster-stop.sh
+  fi
+fi
+

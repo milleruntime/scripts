@@ -1,0 +1,16 @@
+#!/bin/bash
+echo "Make sure you are on master. Local branches: "
+
+URL="https://issues.apache.org/jira/browse/"
+TMP=".tmp-bash-file"
+
+git branch | grep ACC* > $TMP
+
+while read -r line
+  do FULL_URL="${URL}${line}"
+  #echo "curling for $FULL_URL"
+  echo -n "$line "
+  curl -s $FULL_URL | grep "<title>" | sed 's|<[/]*title>||g' | sed 's|- ASF JIRA||g'
+done < $TMP
+
+rm $TMP

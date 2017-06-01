@@ -1,0 +1,5 @@
+#!/bin/bash
+TEST=$1
+shift
+mvn -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Dcheckstyle.skip -DfailIfNoTests=false "$@" verify
+
