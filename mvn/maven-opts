@@ -1,0 +1,2 @@
+#!/bin/bash
+export MAVEN_OPTS="-Xms4096m -Xmx16g -Xss228m"

@@ -1,0 +1,16 @@
+#!/bin/bash
+. $SCRIPTS_HOME/mvn/maven-opts
+env | grep MAVEN
+
+cd ~/workspace/accumulo/
+TEST=$1
+NUM=$2
+
+for x in {1..$NUM} ; do
+	echo "Test run $x"
+	echo "mvn -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Dcheckstyle.skip -DfailIfNoTests=false \"\" verify"
+	mvn -q -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Dcheckstyle.skip -DfailIfNoTests=false "" verify
+
+	echo "Test done grep output for span:"
+	grep -A1 "org.apache.accumulo.core.client.impl.TabletServerBatchWriter$MutationWriter" ~/workspace/accumulo/test/target/failsafe-reports/org.apache.accumulo.test.ShellServerIT-output.txt
+done

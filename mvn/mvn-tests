@@ -1,7 +1,10 @@
+#!/bin/bash
 # Run this script in git directory
 # It will pull out any Tests that have
 #  changed in your workspace (but not committed)
 #  and run just those tests
+. $SCRIPTS_HOME/mvn/maven-opts
+env | grep MAVEN
 
 DIFF=`git diff --cached --name-only`
 if [ -z "$DIFF" ] 
@@ -27,4 +30,4 @@ rm tmp
 TESTS=`cat tmp2`
 rm tmp2
 echo "Running tests $TESTS"
-mvn test -Dtest="$TESTS"
+mvn test -q -Dtest="$TESTS"

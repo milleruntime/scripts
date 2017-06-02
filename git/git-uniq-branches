@@ -1,0 +1,60 @@
+#!/bin/bash
+
+if [[ -z "$1" ]] ; then
+  #echo "usage: $0 <origin> <upstream>"
+  ORIGIN="origin" 
+else
+  ORIGIN=$1
+fi
+if [[ -z "$2" ]] ; then
+  UP="upstream"
+else
+  UP=$2
+fi
+
+echo "$0 $ORIGIN $UP"
+for x in `git branch --list -r $ORIGIN/ACC*`
+do 
+  echo -n "$x "
+  git log $x -1 | grep Date
+done | awk '{print $7" "$4" "$5" "$1}' | sort -b -k 1.1,1.4 -k 2M > tmpfile
+
+for x in `git branch --list -r $UP/ACC*`
+do 
+  echo -n "$x "
+  git log $x -1 | grep Date
+done | awk '{print $7" "$4" "$5" "$1}' | sort -b -k 1.1,1.4 -k 2M > tmpfile2
+
+#read branches into an array
+IFS=$'\r\n' GLOBIGNORE='*' command eval 'ONE=($(cat tmpfile))'
+IFS=$'\r\n' GLOBIGNORE='*' command eval 'ONESHORT=($(cat tmpfile | sed "s|.*/||g"))'
+IFS=$'\r\n' GLOBIGNORE='*' command eval 'TWO=($(cat tmpfile2))'
+IFS=$'\r\n' GLOBIGNORE='*' command eval 'TWOSHORT=($(cat tmpfile2 | sed "s|.*/||g"))'
+
+BRANCHES=()
+DROPS=()
+for i in "${!ONE[@]}"
+do
+  UNIQ=false
+  for j in "${!TWO[@]}"
+  do
+    #echo "Checking ${ONESHORT[$i]} against ${TWOSHORT[$j]}"
+    if [[ "${ONESHORT[$i]}" == "${TWOSHORT[$j]}" ]] ; then
+      #echo "${ONE[$i]} is in both"
+      DROPS+=($i)
+    fi
+  done
+done
+
+for x in "${DROPS[@]}"
+do
+  unset ONE[$x]
+done
+
+
+for x in "${ONE[@]}" ; do echo "$x" > tmpfile ; done
+
+cat tmpfile | sort -b -k 1.1,1.4 -k 2M
+
+rm tmpfile
+rm tmpfile2

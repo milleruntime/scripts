@@ -1,6 +1,13 @@
 #!/bin/bash
-. ~/.bashrc
-SW=/local
+
+START='sudo systemctl start'
+STOP='sudo systemctl stop'
+STATUS='sudo systemctl status'
+ZOO='zookeeper'
+ASERV='accumulo-{master,tserver,gc,tracer,monitor}.service'
+HNAME='hadoop-namenode'
+HDATA='hadoop-datanode'
+
 usage() {
   echo "usage: cluster [<start|stop> <hadoop|zookeeper|accumulo>]"
   echo "       cluster start|stop = starts/stops entire cluster"
@@ -25,15 +32,17 @@ then
   exit
 fi
 
-
+# 2 params
 if [[ -n "$2" ]]
 then
+  # second is hadoop
   if [[ "$2" == "hadoop" ]]
   then
-     BINDIR='sbin'
+     
   fi
   if [[ "$2" == "zookeeper" ]]
   then
+     cd $ZOOKEEPER_HOME
      CMD="zkServer.sh $1"
   else
      CMD="$1-all.sh"
@@ -49,12 +58,12 @@ then
   if [[ "$1" == "start" ]]
   then
     echo "Starting entire cluster"
-    ~/scripts/cluster-start.sh
+    ~/scripts/cluster-start
   fi
   if [[ "$1" == "stop" ]]
   then
     echo "Stopping entire cluster"
-    ~/scripts/cluster-stop.sh
+    ~/scripts/cluster-stop
   fi
 fi
 

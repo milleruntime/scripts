@@ -1,0 +1,6 @@
+#!/bin/bash
+. $SCRIPTS_HOME/mvn/maven-opts
+env | grep MAVEN
+echo "mvn clean verify -Psunny"
+mvn clean verify -Psunny
+
