@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo "git remote prune origin"
-#git remote prune origin
+git remote prune origin
 
 echo "git remote prune upstream"
-#git remote prune upstream
+git remote prune upstream
 CMD=`git branch -vv | grep gone | awk '{print $1}'`
 
 #read -r -a ARRAY <<< $CMD
