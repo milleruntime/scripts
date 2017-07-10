@@ -1,0 +1,18 @@
+#!/bin/bash
+echo "Warning Regex buggy"
+
+. $SCRIPTS_HOME/mvn/maven-opts
+env | grep MAVEN
+
+echo "mvn clean package -q -Dfindbugs.skip -DskipTests -DskipITs -Dcheckstyle.skip -l /tmp/tmpout"
+mvn clean package -q -Dfindbugs.skip -DskipTests -DskipITs -Dcheckstyle.skip -l /tmp/tmpout
+
+cat /tmp/tmpout | grep "[ERROR]*.java:.*" | awk '{print $2}' | sed 's/:.*//g' > /tmp/tmpout2
+
+echo "" > /tmp/tmpout
+cat /tmp/tmpout2 | while read -r line ; do
+  echo -n "${line} " >> /tmp/tmpout
+done
+
+cat /tmp/tmpout
+rm /tmp/tmpout /tmp/tmpout2

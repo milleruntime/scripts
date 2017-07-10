@@ -6,11 +6,11 @@ cd ~/workspace/accumulo/
 TEST=$1
 NUM=$2
 
-for x in {1..$NUM} ; do
+for (( x=1; x<=$NUM; x++ )) ; do
 	echo "Test run $x"
-	echo "mvn -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Dcheckstyle.skip -DfailIfNoTests=false \"\" verify"
-	mvn -q -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Dcheckstyle.skip -DfailIfNoTests=false "" verify
+	echo "mvn -q verify -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Dcheckstyle.skip -DfailIfNoTests=false"
+	mvn -q verify -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Drat.skip -Dcheckstyle.skip -DfailIfNoTests=false 
 
-	echo "Test done grep output for span:"
-	grep -A1 "org.apache.accumulo.core.client.impl.TabletServerBatchWriter$MutationWriter" ~/workspace/accumulo/test/target/failsafe-reports/org.apache.accumulo.test.ShellServerIT-output.txt
+#	echo "Test done grep output for span:"
+#	grep -A1 "org.apache.accumulo.core.client.impl.TabletServerBatchWriter$MutationWriter" ~/workspace/accumulo/test/target/failsafe-reports/org.apache.accumulo.test.ShellServerIT-output.txt
 done
