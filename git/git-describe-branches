@@ -1,10 +1,16 @@
 #!/bin/bash
-echo "Make sure you are on master. Local branches: "
+echo "Usage: $0 [branch-name]"
+echo "Make sure you are on master. No args describes all local branches"
 
 URL="https://issues.apache.org/jira/browse/"
 TMP=".tmp-bash-file"
+BRANCH="$1"
 
-git branch | grep ACC* > $TMP
+if [[ -n "$BRANCH" ]] ; then
+  echo "$BRANCH" > $TMP
+else
+  git branch | grep ACC* > $TMP
+fi
 
 while read -r line
   do FULL_URL="${URL}${line}"
