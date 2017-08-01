@@ -1,4 +1,5 @@
 #!/bin/bash
+# Prunes origin and upstream then prompts to delete gone branches"
 
 echo "git remote prune origin"
 git remote prune origin

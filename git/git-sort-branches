@@ -1,9 +1,15 @@
 #!/bin/bash
+# Sorts branches from a remote by date
+# Usage: git-sort-branches <remote-name>
+
 
 if [[ -z "$1" ]] ; then
   echo "usage: $0 <remote-name>"
   exit
 fi
 
-for x in `git branch --list -r $1/ACC*`; do echo -n "$x "; git log $x -1 | grep Date; done | awk '{print $7" "$4" "$5" "$1}' | sort -b -k 1.1,1.4 -k 2M
+# old method
+#for x in `git branch --list -r $1/ACC*`; do echo -n "$x "; git log $x -1 | grep Date; done | awk '{print $7" "$4" "$5" "$1}' | sort -b -k 1.1,1.4 -k 2M
 
+# new method
+git for-each-ref --sort=-committerdate refs/heads/
