@@ -1,0 +1,15 @@
+#!/bin/bash
+# Checkout pull request as a branch
+# Usage: git-pull-request <pr-number>
+
+PR=$1
+if [[ -z "$PR" ]] ; then
+  echo "usage: $0 <pull-request-number>"
+  exit
+fi
+
+echo "If missing github remote run:"
+echo "  git remote add github git@github.com:apache/accumulo.git"
+
+git fetch github "pull/$PR/head:pr-$PR"
+git checkout "pr-$PR"
