@@ -2,6 +2,5 @@
 . $SCRIPTS_HOME/mvn/maven-opts
 env | grep MAVEN
 
-echo "mvn clean package -Dfindbugs.skip -DskipTests -DskipITs -Dcheckstyle.skip"
-mvn clean package -Dfindbugs.skip -DskipTests -DskipITs -Dcheckstyle.skip
-
+echo mvn compile
+mvn compile
