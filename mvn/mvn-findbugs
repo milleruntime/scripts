@@ -1,0 +1,6 @@
+#!/bin/bash
+set -x #echo on
+. $SCRIPTS_HOME/mvn/maven-opts
+env | grep MAVEN
+
+mvn clean verify -DskipTests -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip
