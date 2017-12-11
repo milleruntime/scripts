@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x #echo on
 . $SCRIPTS_HOME/mvn/maven-opts
 env | grep MAVEN
 
@@ -8,7 +9,6 @@ NUM=$2
 
 for (( x=1; x<=$NUM; x++ )) ; do
 	echo "Test run $x"
-	echo "mvn -q verify -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Dcheckstyle.skip -DfailIfNoTests=false"
 	mvn -q verify -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Drat.skip -Dcheckstyle.skip -DfailIfNoTests=false 
 
 #	echo "Test done grep output for span:"

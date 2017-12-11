@@ -1,7 +1,7 @@
 #!/bin/bash
+set -x #echo on
 . $SCRIPTS_HOME/mvn/maven-opts
 env | grep MAVEN
 
-echo "mvn clean package -Dfindbugs.skip -DskipITs -Dcheckstyle.skip"
 mvn clean package -Dfindbugs.skip -DskipITs -Dcheckstyle.skip 
 

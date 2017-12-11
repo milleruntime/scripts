@@ -1,9 +1,9 @@
 #!/bin/bash
+set -x #echo on
 . $SCRIPTS_HOME/mvn/maven-opts
 env | grep MAVEN
 
 TEST=$1
 shift
-echo "mvn clean -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Dcheckstyle.skip -DfailIfNoTests=false \"$@\" verify"
 mvn clean -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Dcheckstyle.skip -DfailIfNoTests=false "$@" verify
 
