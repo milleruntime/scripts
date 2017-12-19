@@ -1,0 +1,2 @@
+accumulo shell -e 'createtable test_ingest' -u root -p secret
+accumulo org.apache.accumulo.test.TestIngest -i uno -u root -p secret --rows 3000000
