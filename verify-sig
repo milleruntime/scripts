@@ -1,0 +1,22 @@
+#!/bin/bash
+# usage verify-sig <file>
+FILE=$1
+
+function check {
+	SIG=$1
+	echo "Checking $FILE.$SIG"
+	cat "$FILE.$SIG"
+	echo ""
+	PROG="$SIG""sum"
+
+	RESULT=$(diff <(echo $(cat $FILE.$SIG)"") <($PROG $FILE | awk '{print $1}'))
+	if [[ "$RESULT" ]]; then
+		echo "FATAL: $SIG Signature for $FILE does NOT match!"
+		echo $RESULT
+	else
+		echo "Looks good"
+	fi
+}
+
+check md5
+check sha1
