@@ -1,2 +1,7 @@
+accumulo shell -e 'droptable test_ingest -f' -u root -p secret
 accumulo shell -e 'createtable test_ingest' -u root -p secret
-accumulo org.apache.accumulo.test.TestIngest -i uno -u root -p secret --rows 3000000
+echo "Ingesting 1K rows"
+accumulo org.apache.accumulo.test.TestIngest -i uno -u root -p secret --rows 1000
+
+accumulo shell -e 'compact -t test_ingest -w' -u root -p secret
+accumulo shell -e 'tables -l' -u root -p secret
