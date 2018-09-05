@@ -6,7 +6,7 @@ echo "Warning Regex buggy"
 . $SCRIPTS_HOME/mvn/maven-opts
 env | grep MAVEN
 
-mvn clean package -q -Dfindbugs.skip -DskipTests -DskipITs -Dcheckstyle.skip -l /tmp/tmpout
+mvn clean package -q -Dspotbugs.skip -DskipTests -DskipITs -Dcheckstyle.skip -l /tmp/tmpout
 
 cat /tmp/tmpout | grep "[ERROR]*.java:.*" | awk '{print $2}' | sed 's/:.*//g' > /tmp/tmpout2
 

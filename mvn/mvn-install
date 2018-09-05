@@ -3,5 +3,5 @@ set -x #echo on
 . $SCRIPTS_HOME/mvn/maven-opts
 env | grep MAVEN
 
-mvn clean install -Dfindbugs.skip -DskipTests -DskipITs -Dcheckstyle.skip -Drat.skip -Dformatter.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip
+mvn clean install -Dspotbugs.skip -DskipTests -DskipITs -Dcheckstyle.skip -Drat.skip -Dformatter.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip
 

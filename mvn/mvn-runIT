@@ -5,5 +5,5 @@ env | grep MAVEN
 
 TEST=$1
 shift
-mvn clean -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false "$@" verify
+mvn clean -Dit.test=$TEST -Dtest=foo -Dspotbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false "$@" verify
 

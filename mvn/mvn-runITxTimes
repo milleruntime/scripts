@@ -9,7 +9,7 @@ NUM=$2
 
 for (( x=1; x<=$NUM; x++ )) ; do
 	echo "Test run $x"
-	mvn -q verify -Dit.test=$TEST -Dtest=foo -Dfindbugs.skip -Drat.skip -Dcheckstyle.skip -DfailIfNoTests=false 
+	mvn -q verify -Dit.test=$TEST -Dtest=foo -Dspotbugs.skip -Drat.skip -Dcheckstyle.skip -DfailIfNoTests=false 
 
 #	echo "Test done grep output for span:"
 #	grep -A1 "org.apache.accumulo.core.client.impl.TabletServerBatchWriter$MutationWriter" ~/workspace/accumulo/test/target/failsafe-reports/org.apache.accumulo.test.ShellServerIT-output.txt
