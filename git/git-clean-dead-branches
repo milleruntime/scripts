@@ -10,9 +10,14 @@ set -x #echo on
 
 git remote prune origin
 git remote prune upstream
-{ set +x; } 2>/dev/null
+{ set +x; } 2>/dev/null  #echo off
 
 CMD=`git branch -vv | grep gone | awk '{print $1}'`
+
+if [[ -z "$CMD" ]] ; then
+ echo "No branches to remove"
+ exit 0
+fi
 
 echo "Delete these branches?"
 echo "$CMD" 
