@@ -1,9 +1,16 @@
 #!/bin/bash
+# usage: mvn-runIT <directory/IT>
+
 set -x #echo on
 . $SCRIPTS_HOME/mvn/maven-opts
 env | grep MAVEN
 
-TEST=$1
+# if param is a directory get all ITs from that dir
+if [ -d "$1" ]; then
+   TEST=$(ls -p $1 | grep -v / | grep ".*IT.java" | tr '\n' ',')
+else
+   TEST=$1
+fi
 shift
 mvn clean -Dit.test=$TEST -Dtest=foo -Dspotbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false "$@" verify
 
