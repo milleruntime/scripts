@@ -30,4 +30,4 @@ rm tmp
 TESTS=`cat tmp2`
 rm tmp2
 echo "Running tests $TESTS"
-mvn test -q -Dtest="$TESTS"
+mvn clean test -Dtest="$TESTS"
