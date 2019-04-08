@@ -1,5 +1,11 @@
 #!/bin/bash
-# usage verify-sig <file>
+
+if [[ -z "$1" ]]; then
+	echo "usage $0 <file>"
+	exit 0
+fi
+
+
 FILE=$1
 
 function check {
