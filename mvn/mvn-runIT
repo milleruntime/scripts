@@ -3,9 +3,19 @@
 # number-of-runs defaults to 1
 RUNS=1
 
+# get the version.. grep for version | get 3rd line | awk out tags
+VER=`egrep -m3 "version" pom.xml | sed -n 3p | awk -F "[<>]" '{print $3}'`
+ACC_START="~/.m2/repository/org/apache/accumulo/accumulo-start/$VER/accumulo-start-$VER.jar"
+
+echo "$ACC_START"
+if [ ! -f "$ACC_START" ]; then
+   echo "dude run mvn-install"
+   exit
+fi
+
 set -x #echo on
 . $SCRIPTS_HOME/mvn/maven-opts
-env | grep MAVEN
+#env | grep MAVEN
 
 # if param is a directory get all ITs from that dir
 if [ -d "$1" ]; then
