@@ -15,7 +15,7 @@ else
 fi
 shift
 
-MVN='mvn clean -Dit.test=$TEST -Dtest=foo -Dspotbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false "$@" verify'
+MVN='mvn clean -Dit.test=$TEST -Dtest=foo -Dspotbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false "$@" verify -pl :accumulo-test'
 i=0
 while [[ $i < $RUNS ]]; do
    i=$(( i + 1))
