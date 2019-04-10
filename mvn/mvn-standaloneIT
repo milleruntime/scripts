@@ -1,0 +1,33 @@
+#!/bin/bash
+# usage: mvn-standaloneIT
+
+. $SCRIPTS_HOME/util.sh
+
+CONF="config-file.properties"
+CONF_FILE="$SCRIPTS_HOME/mvn/$CONF"
+TMP_FILE="/tmp/$CONF"
+
+#set -x #echo on
+# mvn was crashing with Uno running
+#. $SCRIPTS_HOME/mvn/maven-opts
+#env | grep MAVEN
+
+if [[ -f "$TMP_FILE" ]]; then
+   echo "A config file exsits in $TMP_FILE"
+   if prompt "Would you like to use this file?"; then
+	echo "OK using it"
+   else
+	echo "ITS GONE"
+	rm /tmp/$CONF
+   fi
+fi
+cp ${CONF_FILE} /tmp/$CONF
+chmod 777 /tmp/$CONF
+
+MVN="mvn clean verify -Dtest=foo -Dspotbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false -Dfailsafe.groups=org.apache.accumulo.test.categories.StandaloneCapableClusterTests -Daccumulo.it.properties=$TMP_FILE"
+if [[ -f "$TMP_FILE" ]]; then
+   echo "$MVN"
+   eval $MVN
+else
+   echo "The config file /tmp/$CONF aint there"
+fi
