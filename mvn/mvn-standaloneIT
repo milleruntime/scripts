@@ -1,5 +1,7 @@
 #!/bin/bash
-# usage: mvn-standaloneIT
+# usage: mvn-standaloneIT <IT>
+echo "usage: mvn-standaloneIT <IT>"
+TEST=$1
 
 #. $SCRIPTS_HOME/util.sh
 
@@ -13,7 +15,7 @@ echo "Using conf file: $CONF_FILE"
 #. $SCRIPTS_HOME/mvn/maven-opts
 #env | grep MAVEN
 
-MVN="mvn clean verify -Dtest=foo -Dspotbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false -Dfailsafe.groups=org.apache.accumulo.test.categories.StandaloneCapableClusterTests -Daccumulo.it.properties=$CONF_FILE"
+MVN="mvn clean verify -Dit.test=$TEST -Dtest=foo -Dspotbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false -Dfailsafe.groups=org.apache.accumulo.test.categories.StandaloneCapableClusterTests -Daccumulo.it.properties=$CONF_FILE"
 if [[ -f $CONF_FILE ]]; then
    echo "$MVN"
    eval $MVN
