@@ -1,7 +1,15 @@
 #!/bin/bash
+# Verifies signatures of a downloaded file
+# Assumes the current directory contains files in the form:  
+#  file, file.asc, file.md5, file.sha1, file.sha512
+#
+# if file not available, you will have to run:
+#   echo "##-HASH-##" > file.sha512
 
 if [[ -z "$1" ]]; then
 	echo "usage $0 <file>"
+	echo "This script looks in pwd ($(pwd)) for signature files"
+	echo "md5, sha1, sha512, asc"
 	exit 0
 fi
 
@@ -10,15 +18,21 @@ FILE=$1
 
 function check {
 	SIG=$1
-	echo "Checking $FILE.$SIG"
-	cat "$FILE.$SIG"
+    FILE_SIG="$FILE.$SIG"
+	echo "Checking $FILE_SIG"
+	if [[ ! -f "$FILE_SIG" ]]; then
+		echo "WARNING: There is no signature for $FILE_SIG"
+		return
+	fi
+	cat "$FILE_SIG"
 	echo ""
 	PROG="$SIG""sum"
 
-	RESULT=$(diff <(echo $(cat $FILE.$SIG)"") <($PROG $FILE | awk '{print $1}'))
+	RESULT=$(diff <(echo $(cat $FILE_SIG)"") <($PROG $FILE | awk '{print $1}'))
 	if [[ "$RESULT" ]]; then
 		echo "FATAL: $SIG Signature for $FILE does NOT match!"
 		echo $RESULT
+		exit 1
 	else
 		echo "Looks good"
 	fi
@@ -26,6 +40,7 @@ function check {
 
 check md5
 check sha1
+check sha512
 
 echo "Calling gpg --verify ${FILE}.asc"
 gpg --verify "${FILE}.asc"
