@@ -1,0 +1,13 @@
+# usage: test-ingest [rows] - ingest 3 Million or provided rows
+ROWS=3000000
+if [[ -n "$1" ]]; then
+  ROWS=$1
+fi
+
+accumulo shell -e 'droptable test_ingest -f' -u root -p secret
+accumulo shell -e 'createtable test_ingest' -u root -p secret
+echo "Ingesting $ROWS rows"
+accumulo org.apache.accumulo.test.TestIngest -i uno -u root -p secret --rows "${ROWS}"
+
+accumulo shell -e 'compact -t test_ingest -w' -u root -p secret
+accumulo shell -e 'tables -l' -u root -p secret
