@@ -7,6 +7,7 @@ fi
 
 accumulo shell -e 'droptable test_ingest -f' -u root -p secret
 accumulo shell -e 'createtable test_ingest' -u root -p secret
+accumulo shell -e 'addsplits -t test_ingest row_0000000005 row_0000000055 row_0000000555' -u root -p secret
 echo "Ingesting $ROWS rows"
 accumulo org.apache.accumulo.test.TestIngest -c "$ACCUMULO_HOME/conf/accumulo-client.properties" -u root --rows "${ROWS}" --cols "${COLS}"
 accumulo shell -e 'tables -l' -u root -p secret
