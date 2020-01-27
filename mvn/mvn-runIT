@@ -31,7 +31,7 @@ else
    MULTI=
 fi
 
-MVN="mvn clean verify -Dit.test=$TEST -Dtest=foo -Dspotbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false $MULTI"
+MVN="mvn clean verify -Dit.test=$TEST -Dtest=foo -Dspotbugs.skip -Drat.skip -Dtimeout.factor=3 -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false $MULTI"
 for (( x=1; x<=$RUNS; x++ )) ; do
    echo "Run $x out of $RUNS"
    echo "$MVN"
