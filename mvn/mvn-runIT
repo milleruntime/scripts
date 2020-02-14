@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: mvn-runIT <directory/IT> [number-of-runs]
+# usage: mvn-runIT [directory/IT] [number-of-runs]
 # number-of-runs defaults to 1
 RUNS=${2:-1}
 
@@ -31,7 +31,13 @@ else
    MULTI=
 fi
 
-MVN="mvn clean verify -Dit.test=$TEST -Dtest=foo -Dspotbugs.skip -Drat.skip -Dtimeout.factor=3 -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false $MULTI"
+if [[ -z "$TEST" ]]; then
+   TEST_CMD=
+else
+   TEST_CMD=-Dit.test=$TEST
+fi
+
+MVN="mvn clean verify $TEST_CMD -Dtest=foo -Dspotbugs.skip -Drat.skip -Dtimeout.factor=3 -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false $MULTI"
 for (( x=1; x<=$RUNS; x++ )) ; do
    echo "Run $x out of $RUNS"
    echo "$MVN"
