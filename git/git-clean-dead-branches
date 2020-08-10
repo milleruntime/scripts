@@ -2,8 +2,8 @@
 # Prunes origin and upstream then prompts to delete gone branches"
 
 CURRENT=$(git rev-parse --abbrev-ref HEAD)
-if [[ "$CURRENT" != "master" ]] ; then
-	echo "Please switch to master"
+if [[ "$CURRENT" != "main" ]] ; then
+	echo "Please switch to main"
 	exit 1
 fi
 set -x #echo on
