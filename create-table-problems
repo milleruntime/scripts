@@ -1,0 +1,7 @@
+# use the commands below to create table problems in the metadata table
+
+table accumulo.metadata
+grant Table.WRITE -u root -t accumulo.metadata
+insert ~err_2 FILE_READ hdfs://localhost:8020/accumulo/tables/2/t-000000b/F000000k.rf "\x00\x00\x01t\xEA\xC7z\x0C\x01\x00\x09127.0.0.1\x01\x00\x1ECannot seek to negative offset"
+insert ~err_3 FILE_READ hdfs://localhost:8020/accumulo/tables/3/default_tablet/F000000v.rf "\x00\x00\x01t\xEA\xC7\x05\x16\x01\x00\x09127.0.0.1\x01\x00\x1ECannot seek to negative offset"
+
