@@ -5,6 +5,15 @@ if [[ -n "$1" ]]; then
   ROWS=$1
 fi
 
+# need test jar to be in lib
+echo "Looking for $ACCUMULO_HOME/lib/accumulo-test-*.jar"
+if compgen -G  "${ACCUMULO_HOME}/lib/accumulo-test-*.jar" > /dev/null; then
+  echo "Test jar found"
+else
+  echo "Test jar is not in lib!"
+  exit 1
+fi
+
 accumulo shell -e 'droptable test_ingest -f' -u root -p secret
 accumulo shell -e 'createtable test_ingest' -u root -p secret
 accumulo shell -e 'addsplits -t test_ingest row_0000000005 row_0000000055 row_0000000555' -u root -p secret
