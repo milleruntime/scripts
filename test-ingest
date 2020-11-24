@@ -6,7 +6,7 @@ if [[ -n "$1" ]]; then
 fi
 
 # need test jar to be in lib
-echo "Looking for $ACCUMULO_HOME/lib/accumulo-test-*.jar"
+echo "Looking for test jar in $ACCUMULO_HOME/lib"
 if compgen -G  "${ACCUMULO_HOME}/lib/accumulo-test-*.jar" > /dev/null; then
   echo "Test jar found"
 else
