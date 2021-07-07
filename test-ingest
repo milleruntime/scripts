@@ -1,8 +1,14 @@
 # usage: test-ingest [rows] - ingest 1000 or provided rows
 ROWS=1000
 COLS=10
+SPLITS=20
+SPLITS_FILE=$ACCUMULO_HOME/conf/splits
 if [[ -n "$1" ]]; then
   ROWS=$1
+fi
+
+if [[ -f $SPLITS_FILE ]]; then
+  rm -f "$SPLITS_FILE"
 fi
 
 # need test jar to be in lib
@@ -14,9 +20,17 @@ else
   exit 1
 fi
 
+# create splits
+NUM=$((ROWS / SPLITS))
+echo "Writing the following splits to $SPLITS_FILE"
+for (( x=1; x<=$SPLITS; x++ )) ; do
+   s=$((x * NUM))
+   printf "row_%010d\n" "$s" | tee -a "$SPLITS_FILE"
+done
+
 accumulo shell -e 'droptable test_ingest -f' -u root -p secret
 accumulo shell -e 'createtable test_ingest' -u root -p secret
-accumulo shell -e 'addsplits -t test_ingest row_0000000005 row_0000000055 row_0000000555' -u root -p secret
+accumulo shell -e "addsplits -t test_ingest -sf $SPLITS_FILE" -u root -p secret
 echo "Ingesting $ROWS rows"
 accumulo org.apache.accumulo.test.TestIngest -c "$ACCUMULO_HOME/conf/accumulo-client.properties" -u root --rows "${ROWS}" --cols "${COLS}"
 accumulo shell -e 'tables -l' -u root -p secret
