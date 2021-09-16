@@ -30,10 +30,13 @@ done
 
 accumulo shell -e 'droptable test_ingest -f' -u root -p secret
 accumulo shell -e 'createtable test_ingest' -u root -p secret
+#accumulo shell -e 'config -t test_ingest -s table.crypto.opts.key.uri=/home/mike/workspace/uno/CryptoTest-testkeyfile' -u root -p secret
+#accumulo shell -e 'config -t test_ingest -s table.crypto.service=org.apache.accumulo.core.spi.crypto.NoCryptoService' -u root -p secret
+#accumulo shell -e 'config -t test_ingest -s table.crypto.opts.enabled=false' -u root -p secret
 accumulo shell -e "addsplits -t test_ingest -sf $SPLITS_FILE" -u root -p secret
 echo "Ingesting $ROWS rows"
 accumulo org.apache.accumulo.test.TestIngest -c "$ACCUMULO_HOME/conf/accumulo-client.properties" -u root --rows "${ROWS}" --cols "${COLS}"
-accumulo shell -e 'tables -l' -u root -p secret
+#accumulo shell -e 'tables -l' -u root -p secret
 
 echo "Other possible commands to run"
 echo "accumulo shell -e 'flush -t test_ingest -w' -u root -p secret"
