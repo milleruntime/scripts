@@ -3,16 +3,6 @@
 # $2 = number of splits, default is 20
 # COMING SOON $3 = true to setup crypto, default to false
 
-# verify first 2 arguments are numbers
-if ! [[ "$1" =~ ^[0-9]+$ ]]; then
-  echo "Sorry first argument must be number of rows"
-  exit 1
-fi
-if ! [[ "$2" =~ ^[0-9]+$ ]]; then
-  echo "Sorry second argument must be number of splits"
-  exit 1
-fi
-
 ROWS=${1:-1000}
 SPLITS=${2:-20}
 #CRYPTO=${3:-false}
@@ -36,7 +26,7 @@ fi
 
 # create splits
 NUM=$((ROWS / SPLITS))
-echo "Writing the following splits to $SPLITS_FILE"
+echo "Writing $SPLITS splits to $SPLITS_FILE"
 for (( x=1; x<=$SPLITS; x++ )) ; do
    s=$((x * NUM))
    printf "row_%010d\n" "$s" | tee -a "$SPLITS_FILE"
