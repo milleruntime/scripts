@@ -1,11 +1,24 @@
-# usage: test-ingest [rows] - ingest 1000 or provided rows
-ROWS=1000
-COLS=10
-SPLITS=20
-SPLITS_FILE=$ACCUMULO_HOME/conf/splits
-if [[ -n "$1" ]]; then
-  ROWS=$1
+# usage: test-ingest [OPTIONS]
+# $1 = number of rows, default is 1000
+# $2 = number of splits, default is 20
+# COMING SOON $3 = true to setup crypto, default to false
+
+# verify first 2 arguments are numbers
+if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+  echo "Sorry first argument must be number of rows"
+  exit 1
 fi
+if ! [[ "$2" =~ ^[0-9]+$ ]]; then
+  echo "Sorry second argument must be number of splits"
+  exit 1
+fi
+
+ROWS=${1:-1000}
+SPLITS=${2:-20}
+#CRYPTO=${3:-false}
+CRYPTO=false
+COLS=10
+SPLITS_FILE=$ACCUMULO_HOME/conf/splits
 
 if [[ -f $SPLITS_FILE ]]; then
   rm -f "$SPLITS_FILE"
@@ -17,6 +30,7 @@ if compgen -G  "${ACCUMULO_HOME}/lib/accumulo-test-*.jar" > /dev/null; then
   echo "Test jar found"
 else
   echo "Test jar is not in lib!"
+  echo "From source build dir: cp test/target/accumulo-test-2.1.0-SNAPSHOT.jar $ACCUMULO_HOME/lib"
   exit 1
 fi
 
@@ -30,14 +44,17 @@ done
 
 accumulo shell -e 'droptable test_ingest -f' -u root -p secret
 accumulo shell -e 'createtable test_ingest' -u root -p secret
-#accumulo shell -e 'config -t test_ingest -s table.crypto.opts.key.uri=/home/mike/workspace/uno/CryptoTest-testkeyfile' -u root -p secret
-#accumulo shell -e 'config -t test_ingest -s table.crypto.service=org.apache.accumulo.core.spi.crypto.NoCryptoService' -u root -p secret
-#accumulo shell -e 'config -t test_ingest -s table.crypto.opts.enabled=false' -u root -p secret
+
+if [ "$CRYPTO" = true ] ; then
+  accumulo shell -e 'config -t test_ingest -s table.crypto.opts.key.uri=/home/mike/workspace/uno/CryptoTest-testkeyfile' -u root -p secret
+  accumulo shell -e 'config -t test_ingest -s table.crypto.service=org.apache.accumulo.core.spi.crypto.NoCryptoService' -u root -p secret
+  accumulo shell -e 'config -t test_ingest -s table.crypto.opts.enabled=false' -u root -p secret
+fi
 accumulo shell -e "addsplits -t test_ingest -sf $SPLITS_FILE" -u root -p secret
 echo "Ingesting $ROWS rows"
 accumulo org.apache.accumulo.test.TestIngest -c "$ACCUMULO_HOME/conf/accumulo-client.properties" -u root --rows "${ROWS}" --cols "${COLS}"
 #accumulo shell -e 'tables -l' -u root -p secret
 
 echo "Other possible commands to run"
-echo "accumulo shell -e 'flush -t test_ingest -w' -u root -p secret"
-echo "accumulo shell -e 'compact -t test_ingest -w' -u root -p secret"
+echo "accumulo shell -e 'flush -t test_ingest'"
+echo "accumulo shell -e 'compact -t test_ingest'"
