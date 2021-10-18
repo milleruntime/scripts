@@ -3,17 +3,6 @@
 # number-of-runs defaults to 1
 RUNS=${2:-1}
 
-# get the version.. grep for version | get 3rd line | awk out tags
-VER=`egrep -m3 "version" pom.xml | sed -n 3p | awk -F "[<>]" '{print $3}'`
-ACC_START="$HOME/.m2/repository/org/apache/accumulo/accumulo-start/${VER}/accumulo-start-${VER}.jar"
-
-# this check is actually pointless: jar can exist and still need to run install
-echo "$ACC_START"
-if [[ ! -e "$ACC_START" ]]; then
-   echo "dude run mvn-install"
-   exit
-fi
-
 . $SCRIPTS_HOME/mvn/maven-opts
 #env | grep MAVEN
 
@@ -37,7 +26,7 @@ else
    TEST_CMD=-Dit.test=$TEST
 fi
 
-MVN="mvn clean verify $TEST_CMD -Dtest=foo -Dspotbugs.skip -Drat.skip -Dtimeout.factor=3 -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false $MULTI"
+MVN="mvn clean verify $TEST_CMD -Dtest=foo -Dspotbugs.skip -Drat.skip -Dformatter.skip -Dcheckstyle.skip -Dmodernizer.skip -Dimpsort.skip -Dsortpom.skip -DfailIfNoTests=false $MULTI"
 for (( x=1; x<=$RUNS; x++ )) ; do
    echo "Run $x out of $RUNS"
    echo "$MVN"
