@@ -1,0 +1,34 @@
+#!/bin/bash
+# Downloads signatures of a url
+#
+# if file not available, you will have to run:
+#   echo "##-HASH-##" > file.sha512
+
+if [[ -z "$1" ]]; then
+	echo "usage $0 <url>"
+	exit 0
+fi
+
+
+URL=$1
+FILE=`echo "$URL" | cut -d/ -f12`
+
+echo "Downloading file"
+curl $URL -o "$FILE"
+
+function check {
+	SIG=$1
+        URL_SIG="$URL.$SIG"
+	FILE_SIG="$FILE.$SIG"
+	echo "Downloading $URL_SIG to $FILE_SIG"
+	curl $URL_SIG > $FILE_SIG
+	if [[ ! -f "$FILE_SIG" ]]; then
+		echo "WARNING: There is no signature for $FILE_SIG"
+		return
+	fi
+}
+
+check md5
+check sha1
+check asc
+
