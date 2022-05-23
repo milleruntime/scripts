@@ -3,5 +3,4 @@ set -x #echo on
 . $SCRIPTS_HOME/mvn/maven-opts
 env | grep MAVEN
 
-mvn clean verify -Psunny
-
+mvn clean verify -PskipQA,sunny -DskipTests=false -DskipITs=false -Dtest=none
