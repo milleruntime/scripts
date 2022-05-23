@@ -11,7 +11,7 @@ COLS=10
 SPLITS_FILE=$ACCUMULO_HOME/conf/splits
 
 if [[ -f $SPLITS_FILE ]]; then
-  rm -f "$SPLITS_FILE"
+  echo "Using $SPLITS_FILE"
 fi
 
 # need test jar to be in lib
