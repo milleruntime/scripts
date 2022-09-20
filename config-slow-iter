@@ -1,0 +1,4 @@
+# script to setup slow iterator on table for long compaction, scan or flush
+config -t ci -s table.iterator.majc.slow=1,org.apache.accumulo.test.functional.SlowIterator
+config -t ci -s table.iterator.majc.slow.opt.sleepTime=5
+bye
